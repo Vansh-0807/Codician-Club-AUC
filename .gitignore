@@ -22,3 +22,7 @@ backend/media/
 .idea/
 .DS_Store
 Thumbs.db
+
+# Database Backups
+*.zip
+codician_database.json
