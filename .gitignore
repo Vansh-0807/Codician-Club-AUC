@@ -1,0 +1,24 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.sqlite3
+
+# Node / Vite Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.npm/
+
+# Django
+backend/db.sqlite3
+backend/media/
+
+# IDE / System
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
