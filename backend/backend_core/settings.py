@@ -73,20 +73,18 @@ TEMPLATES = [
 WSGI_APPLICATION = 'backend_core.wsgi.application'
 
 
-# Database
+# Database  
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
 import os
 
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'codician_db',
-        'USER': 'root',
-        'PASSWORD': '#boney@6264464754',
-        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
-        'PORT': '3306',
-    }
+    'default': dj_database_url.config(
+        default=f"postgres://postgres:#boney@6264464754@{os.environ.get('DB_HOST', '127.0.0.1')}:5432/codician_db",
+        conn_max_age=600
+    )
 }
 
 
@@ -131,5 +129,4 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOW_ALL_ORIGINS = True # For development purposes
 
-import pymysql
-pymysql.install_as_MySQLdb()
+

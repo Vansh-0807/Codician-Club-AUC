@@ -2,16 +2,17 @@ version: '3.8'
 
 services:
   db:
-    image: mysql:8.0
+    image: postgres:15
     container_name: codician_db
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: '#boney@6264464754'
-      MYSQL_DATABASE: 'codician_db'
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: '#boney@6264464754'
+      POSTGRES_DB: 'codician_db'
     ports:
-      - "3307:3306"
+      - "5432:5432"
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/postgresql/data
 
   backend:
     build:

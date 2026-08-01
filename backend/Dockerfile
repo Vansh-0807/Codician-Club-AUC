@@ -2,10 +2,10 @@ FROM python:3.13-slim
 
 WORKDIR /app
 
-# Install system dependencies (e.g. default-libmysqlclient-dev for MySQL)
+# Install system dependencies (e.g. libpq-dev for PostgreSQL)
 RUN apt-get update && apt-get install -y \
     pkg-config \
-    default-libmysqlclient-dev \
+    libpq-dev \
     build-essential \
     && rm -rf /var/lib/apt/lists/*
 
