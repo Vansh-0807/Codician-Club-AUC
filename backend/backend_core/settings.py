@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-qs4k7=4)sf53fs!00-as-(g_29ovz8%nr-g@hr*2wiabw%la95
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,6 +44,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -76,13 +77,15 @@ WSGI_APPLICATION = 'backend_core.wsgi.application'
 # Database  
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-import os
+import os       
 
 import dj_database_url
 
+# Password must be URL encoded because it contains '#' and '@'
+# Original password: #boney@6264464754 -> Encoded: %23boney%406264464754
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"postgres://postgres:#boney@6264464754@{os.environ.get('DB_HOST', '127.0.0.1')}:5432/codician_db",
+        default=f"postgres://postgres:%23boney%406264464754@{os.environ.get('DB_HOST', '127.0.0.1')}:5432/codician_db",
         conn_max_age=600
     )
 }
@@ -123,6 +126,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
