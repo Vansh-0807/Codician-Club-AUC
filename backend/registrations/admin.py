@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, EventImage, Leadership, CoreTeamMember
+from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, EventImage, Leadership, CoreTeamMember, GuestSpeaker
 
 @admin.register(Candidate)
 class CandidateAdmin(admin.ModelAdmin):
@@ -47,4 +47,10 @@ class LeadershipAdmin(admin.ModelAdmin):
 @admin.register(CoreTeamMember)
 class CoreTeamMemberAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'position', 'course', 'semester')
+    list_display_links = ('id', 'name')
+
+
+@admin.register(GuestSpeaker)
+class GuestSpeakerAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'title')
     list_display_links = ('id', 'name')

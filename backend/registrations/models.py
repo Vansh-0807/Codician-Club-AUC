@@ -117,3 +117,14 @@ class CoreTeamMember(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.position}"
+
+
+class GuestSpeaker(models.Model):
+    name = models.CharField(max_length=255)
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+    linkedin = models.URLField(blank=True, null=True)
+    photo = models.ImageField(upload_to='guest_speakers/', null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.name} - {self.title}"

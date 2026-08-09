@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, EventImage, Leadership, CoreTeamMember
+from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, EventImage, Leadership, CoreTeamMember, GuestSpeaker
 
 class CandidateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,4 +46,10 @@ class LeadershipSerializer(serializers.ModelSerializer):
 class CoreTeamMemberSerializer(serializers.ModelSerializer):
     class Meta:
         model = CoreTeamMember
+        fields = '__all__'
+
+
+class GuestSpeakerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = GuestSpeaker
         fields = '__all__'

@@ -1,8 +1,9 @@
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import CandidateSerializer, ClubSettingSerializer, AboutUsSerializer, CollegeSerializer, DomainSerializer, EventSerializer, LeadershipSerializer, CoreTeamMemberSerializer
-from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, Leadership, CoreTeamMember
+from rest_framework.decorators import action
+from .serializers import CandidateSerializer, ClubSettingSerializer, AboutUsSerializer, CollegeSerializer, DomainSerializer, EventSerializer, LeadershipSerializer, CoreTeamMemberSerializer, GuestSpeakerSerializer
+from .models import Candidate, ClubSetting, AboutUs, College, Domain, Event, Leadership, CoreTeamMember, GuestSpeaker
 
 class CandidateViewSet(viewsets.ModelViewSet):
     queryset = Candidate.objects.all()
@@ -20,9 +21,26 @@ class LeadershipViewSet(viewsets.ModelViewSet):
     queryset = Leadership.objects.all()
     serializer_class = LeadershipSerializer
 
+    @action(detail=False, methods=['get'])
+    def mentors(self, request):
+        mentors = self.get_queryset().filter(role='Mentor')
+        serializer = self.get_serializer(mentors, many=True)
+        return Response(serializer.data)
+
+    @action(detail=False, methods=['get'])
+    def leaders(self, request):
+        leaders = self.get_queryset().exclude(role='Mentor')
+        serializer = self.get_serializer(leaders, many=True)
+        return Response(serializer.data)
+
 class CoreTeamViewSet(viewsets.ModelViewSet):
     queryset = CoreTeamMember.objects.all()
     serializer_class = CoreTeamMemberSerializer
+
+
+class GuestSpeakerViewSet(viewsets.ModelViewSet):
+    queryset = GuestSpeaker.objects.all()
+    serializer_class = GuestSpeakerSerializer
 
 class SingletonAPIView(APIView):
     """

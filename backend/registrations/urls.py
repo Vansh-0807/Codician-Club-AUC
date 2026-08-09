@@ -8,6 +8,7 @@ router.register(r'domains', views.DomainViewSet, basename='domain')
 router.register(r'events', views.EventViewSet, basename='event')
 router.register(r'leadership', views.LeadershipViewSet, basename='leadership')
 router.register(r'core-team', views.CoreTeamViewSet, basename='core-team')
+router.register(r'guest-speakers', views.GuestSpeakerViewSet, basename='guest-speaker')
 
 urlpatterns = [
     path('api/settings/', views.ClubSettingView.as_view(), name='club_settings'),
