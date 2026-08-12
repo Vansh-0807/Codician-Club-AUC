@@ -317,7 +317,7 @@ function App() {
       </header>
       {/* Interactive Background Mesh */}
       <div className="fixed inset-0 z-0">
-        <div className="absolute inset-0 bg-gray-100 dark:bg-black"></div>
+        <div className="absolute inset-0 bg-gray-100 dark:bg-[#020403]"></div>
         <div className="absolute inset-0 mesh-bg opacity-70"></div>
         <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=')] opacity-50 mix-blend-overlay"></div>
       </div>
