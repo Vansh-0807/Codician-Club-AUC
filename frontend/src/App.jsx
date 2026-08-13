@@ -98,7 +98,7 @@ function App() {
     window.addEventListener("scroll", handleScroll);
     
     // Fetch club settings (logo & tagline)
-    fetch('http://127.0.0.1:8000/api/settings/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/settings/`)
       .then(res => res.json())
       .then(data => {
         if (data.logo) {
@@ -119,7 +119,7 @@ function App() {
       .catch(err => console.error("Error fetching settings:", err));
 
     // Fetch about us text
-    fetch('http://127.0.0.1:8000/api/about_us/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/about_us/`)
       .then(res => res.json())
       .then(data => {
         if (data.text) {
@@ -129,7 +129,7 @@ function App() {
       .catch(err => console.error("Error fetching about us:", err));
 
     // Fetch college data
-    fetch('http://127.0.0.1:8000/api/college/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/college/`)
       .then(res => res.json())
       .then(data => {
         if (data.name) {
@@ -145,7 +145,7 @@ function App() {
       .catch(err => console.error("Error fetching college:", err));
 
     // Fetch domains data
-    fetch('http://127.0.0.1:8000/api/domains/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/domains/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -160,7 +160,7 @@ function App() {
       .catch(err => console.error("Error fetching domains:", err));
 
     // Fetch events data
-    fetch('http://127.0.0.1:8000/api/events/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/events/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -177,7 +177,7 @@ function App() {
       .catch(err => console.error("Error fetching events:", err));
 
     // Fetch leaders data
-    fetch('http://127.0.0.1:8000/api/leadership/leaders/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/leadership/leaders/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -194,7 +194,7 @@ function App() {
       .catch(err => console.error("Error fetching leaders:", err));
 
     // Fetch mentors data
-    fetch('http://127.0.0.1:8000/api/leadership/mentors/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/leadership/mentors/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -211,7 +211,7 @@ function App() {
       .catch(err => console.error("Error fetching mentors:", err));
 
     // Fetch core team data
-    fetch('http://127.0.0.1:8000/api/core-team/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/core-team/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -230,7 +230,7 @@ function App() {
       .catch(err => console.error("Error fetching core team:", err));
 
     // Fetch guest speakers data
-    fetch('http://127.0.0.1:8000/api/guest-speakers/')
+    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/guest-speakers/`)
       .then(res => res.json())
       .then(data => {
         if (data && data.length > 0) {
@@ -857,7 +857,7 @@ function App() {
                 }
 
                 try {
-                    const response = await fetch('http://127.0.0.1:8000/api/candidates/', {
+                    const response = await fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/candidates/`, {
                         method: 'POST',
                         body: formData
                     });
