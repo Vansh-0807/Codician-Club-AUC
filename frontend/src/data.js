@@ -82,7 +82,7 @@ export const eventsData = [
       },
       {
         "image": "events/Beyond the prompt - 1.jpg" 
-      },
+      },  
       {
         "image": "events/Beyond the prompt - 2.jpg" 
       },
@@ -111,7 +111,7 @@ export const leadersData = [
     "image": "leadership/Anuj_Kumar.png"
   },
   {
-    "name": "Devanshu Das Gupta",
+    "name": "Devanshu Dasgupta",
     "role": "Vice President",
     "description": "Supporting the club's vision through leadership, collaboration, and effective execution of initiatives.",
     "linkedin": "https://www.linkedin.com/in/devanshu-dasgupta-509641299/",
@@ -175,7 +175,7 @@ export const coreTeamData = [
   
   {
     "name": "Mansi Verma",
-    "position": "Web & App Developer Lead",
+    "position": "Web & App Development Lead",
     "course": "Btech CSE",
     "semester": "5th",
     "description": "focusing on building engaging digital experiences and turning creative ideas into functional, user-friendly solutions.",
@@ -185,7 +185,7 @@ export const coreTeamData = [
 
   {
     "name": "Ananya Sinha",
-    "position": "Web Developer Lead",
+    "position": "Web Development Lead",
     "course": "BCA",
     "semester": "5th",
     "description": "Leads web development initiatives, builds innovative solutions, and helps the team turn ideas into impactful digital experiences.",
