@@ -29,15 +29,15 @@
 
 
 .gooey-nav-container {
-  --gooey-inactive-text: #374151; /* text-gray-700 */
+  --gooey-inactive-text: #4b5563; /* text-gray-600 */
   --gooey-active-text: #000000;
   --gooey-bubble-bg: #e5e7eb; /* tailwind gray-200 */
 }
 
 :global(.dark) .gooey-nav-container, .dark .gooey-nav-container {
-  --gooey-inactive-text: #d1d5db; /* text-gray-300 */
-  --gooey-active-text: #000000;
-  --gooey-bubble-bg: #ffffff;
+  --gooey-inactive-text: #9ca3af; /* text-gray-400 */
+  --gooey-active-text: #ffffff;
+  --gooey-bubble-bg: #374151; /* text-gray-700 */
 }
 
 .gooey-nav-container {

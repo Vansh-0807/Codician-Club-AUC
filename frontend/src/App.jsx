@@ -5,6 +5,7 @@ import TrueFocus from './components/TrueFocus/TrueFocus';
 import GooeyNav from './components/GooeyNav/GooeyNav';
 
 import "./App.css";
+import { settingsData, aboutUsData, collegeData, domainsData, eventsData, leadersData, mentorsData, coreTeamData, speakersData } from "./data";
 
 
 const projects = [
@@ -50,6 +51,12 @@ const teamMembers = [
 // Set to null to display the default "Codician" text.
 const ADMIN_LOGO_URL = "/logo.png";
 
+const getImageUrl = (path) => {
+  if (!path) return '';
+  if (path.startsWith('http')) return path;
+  return `${import.meta.env.BASE_URL}media/${path}`;
+};
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
@@ -61,10 +68,7 @@ function App() {
     }
     localStorage.setItem('theme', theme);
   }, [theme]);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState("");
-  const [submitted, setSubmitted] = useState(false);
-  const [logoUrl, setLogoUrl] = useState(ADMIN_LOGO_URL);
+  const logoUrl = settingsData?.logo ? getImageUrl(settingsData.logo) : ADMIN_LOGO_URL;
   const [activeAlbum, setActiveAlbum] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const [viewingLogo, setViewingLogo] = useState(false);
@@ -73,188 +77,28 @@ function App() {
     email: "contact@codician.club",
     instagram: "https://instagram.com/codician"
   });
-  const [aboutUsText, setAboutUsText] = useState("Codician Club is an elite network of developers and creators pushing the boundaries of modern software engineering. We are a community-driven organization dedicated to fostering innovation, collaboration, and continuous learning among tech enthusiasts. Whether you are a beginner taking your first steps in coding or an experienced developer building complex architectures, Codician provides the platform, resources, and mentorship to help you build the future.");
-  const [collegeData, setCollegeData] = useState({
-    name: "Amity University Raipur",
-    description: "Established in 1995, our college is a premier institution dedicated to advancing technology and fostering innovation. Recognized nationally for its cutting-edge research facilities and exceptional faculty, it serves as the perfect incubator for the Codician Club to thrive and build the future.",
-    image: "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=80",
-    location_name: "Amity University Raipur, Chhattisgarh",
-    location: "https://maps.google.com/?q=Amity+University+Raipur"
-  });
-  const [domainsData, setDomainsData] = useState([]);
-  const [eventsData, setEventsData] = useState([]);
-  const [leadersData, setLeadersData] = useState([]);
-  const [mentorsData, setMentorsData] = useState([]);
-  const [guestSpeakersData, setGuestSpeakersData] = useState([]);
-  const [coreTeamData, setCoreTeamData] = useState([]);
   const [zoomedImage, setZoomedImage] = useState(null);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [expandedEvents, setExpandedEvents] = useState({});
-  const [expandedSpeakers, setExpandedSpeakers] = useState({});
-  useEffect(() => {
+    useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener("scroll", handleScroll);
     
-    // Fetch club settings (logo & tagline)
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/settings/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.logo) {
-          const url = data.logo.startsWith('http') ? data.logo : `http://127.0.0.1:8000${data.logo}`;
-          setLogoUrl(url);
-        } else {
-          setLogoUrl(null); // No logo uploaded, use fallback
-        }
-        if (data.tagline) {
-          document.title = `Codician Club | ${data.tagline}`;
-        }
-        setSocialLinks({
-          linkedin: data.linkedin_url || "https://linkedin.com/company/codician",
-          email: data.email || "contact@codician.club",
-          instagram: data.instagram_url || "https://instagram.com/codician"
-        });
-      })
-      .catch(err => console.error("Error fetching settings:", err));
-
-    // Fetch about us text
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/about_us/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.text) {
-          setAboutUsText(data.text);
-        }
-      })
-      .catch(err => console.error("Error fetching about us:", err));
-
-    // Fetch college data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/college/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data.name) {
-          setCollegeData({
-            name: data.name,
-            description: data.description,
-            image: data.image ? (data.image.startsWith('http') ? data.image : `http://127.0.0.1:8000${data.image}`) : "https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=400&q=80",
-            location_name: data.location_name || "Amity University Raipur, Chhattisgarh",
-            location: data.location || "https://maps.google.com/?q=Amity+University+Raipur"
-          });
-        }
-      })
-      .catch(err => console.error("Error fetching college:", err));
-
-    // Fetch domains data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/domains/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedDomains = data.map(d => ({
-            title: d.title,
-            description: d.description,
-            image: d.image ? (d.image.startsWith('http') ? d.image : `http://127.0.0.1:8000${d.image}`) : null
-          }));
-          setDomainsData(formattedDomains);
-        }
-      })
-      .catch(err => console.error("Error fetching domains:", err));
-
-    // Fetch events data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/events/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedEvents = data.map(e => ({
-            title: e.title,
-            text: e.text,
-            images: e.images ? e.images.map(imgObj => 
-              imgObj.image.startsWith('http') ? imgObj.image : `http://127.0.0.1:8000${imgObj.image}`
-            ) : []
-          }));
-          setEventsData(formattedEvents);
-        }
-      })
-      .catch(err => console.error("Error fetching events:", err));
-
-    // Fetch leaders data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/leadership/leaders/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedLeadership = data.map(ldr => ({
-            name: ldr.name,
-            role: ldr.role,
-            description: ldr.description,
-            linkedin: ldr.linkedin,
-            image: ldr.image ? (ldr.image.startsWith('http') ? ldr.image : `http://127.0.0.1:8000${ldr.image}`) : null
-          }));
-          setLeadersData(formattedLeadership);
-        }
-      })
-      .catch(err => console.error("Error fetching leaders:", err));
-
-    // Fetch mentors data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/leadership/mentors/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedMentors = data.map(ldr => ({
-            name: ldr.name,
-            role: ldr.role,
-            description: ldr.description,
-            linkedin: ldr.linkedin,
-            image: ldr.image ? (ldr.image.startsWith('http') ? ldr.image : `http://127.0.0.1:8000${ldr.image}`) : null
-          }));
-          setMentorsData(formattedMentors);
-        }
-      })
-      .catch(err => console.error("Error fetching mentors:", err));
-
-    // Fetch core team data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/core-team/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedTeam = data.map(member => ({
-            name: member.name,
-            position: member.position,
-            course: member.course,
-            semester: member.semester,
-            description: member.description,
-            linkedin: member.linkedin,
-            photo: member.photo ? (member.photo.startsWith('http') ? member.photo : `http://127.0.0.1:8000${member.photo}`) : null
-          }));
-          setCoreTeamData(formattedTeam);
-        }
-      })
-      .catch(err => console.error("Error fetching core team:", err));
-
-    // Fetch guest speakers data
-    fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/guest-speakers/`)
-      .then(res => res.json())
-      .then(data => {
-        if (data && data.length > 0) {
-          const formattedSpeakers = data.map(speaker => ({
-            name: speaker.name,
-            title: speaker.title,
-            description: speaker.description,
-            linkedin: speaker.linkedin,
-            photo: speaker.photo ? (speaker.photo.startsWith('http') ? speaker.photo : `http://127.0.0.1:8000${speaker.photo}`) : null
-          }));
-          setGuestSpeakersData(formattedSpeakers);
-        }
-      })
-      .catch(err => console.error("Error fetching guest speakers:", err));
-
+    if (settingsData?.tagline) {
+      document.title = `Codician Club | ${settingsData.tagline}`;
+    }
+    setSocialLinks({
+      linkedin: settingsData?.linkedin_url || "https://linkedin.com/company/codician",
+      email: settingsData?.email || "contact@codician.club",
+      instagram: settingsData?.instagram_url || "https://instagram.com/codician"
+    });
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const openRegistration = (eventName) => {
-    setSelectedEvent(eventName);
-    setModalOpen(true);
-    setSubmitted(false);
-  };
+  
 
   return (
     <div className="relative min-h-screen bg-gray-100 dark:bg-black text-gray-900 dark:text-[#ededed] overflow-x-hidden selection:bg-gray-900 dark:bg-white/20">
@@ -305,9 +149,7 @@ function App() {
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
           
-          <button className="hidden md:block whitespace-nowrap bg-black text-white dark:bg-white dark:text-black text-sm font-semibold px-5 py-2 rounded-xl shimmer-btn hover:scale-105 transition-transform duration-300" onClick={() => openRegistration("the Club")}>
-            Join the Club
-          </button>
+          
           
           <button className="md:hidden text-gray-800 dark:text-white p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle Navigation">
             {menuOpen ? '✕' : '☰'}
@@ -378,7 +220,7 @@ function App() {
           <div className="p-10 md:p-16 rounded-3xl premium-glass shadow-2xl relative overflow-hidden group hover:-translate-y-2 transition-transform duration-500 text-left">
              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-400/20 transition-all duration-700 pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium relative z-10">
-               {aboutUsText}
+               {aboutUsData?.text}
              </p>
           </div>
         </section>
@@ -393,7 +235,7 @@ function App() {
              <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl group-hover:bg-blue-400/20 transition-all duration-700 pointer-events-none translate-y-1/2 -translate-x-1/2"></div>
              
              <div className="flex-shrink-0 relative z-10 w-40 h-40 md:w-56 md:h-56 rounded-full overflow-hidden border-4 border-black/10 dark:border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.1)] group-hover:scale-105 group-hover:border-black/30 dark:border-white/30 transition-all duration-500">
-                <img src={collegeData.image} alt="College Logo/Campus" className="w-full h-full object-cover" />
+                <img src={getImageUrl(collegeData.image)} alt="College Logo/Campus" className="w-full h-full object-cover" />
              </div>
 
              <div className="relative z-10 flex flex-col text-center md:text-left">
@@ -435,7 +277,7 @@ function App() {
               <BorderGlow key={i} className="w-full h-full"><div  className="h-full w-full group flex flex-col p-8 rounded-3xl premium-glass hover:-translate-y-2 cursor-pointer">
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-black dark:from-white/10 to-transparent flex items-center justify-center text-3xl mb-8 border border-black/10 dark:border-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)] group-hover:scale-110 group-hover:bg-gray-900 hover:dark:bg-white/20 transition-all duration-500 overflow-hidden">
                   {domain.image ? (
-                    <img src={domain.image} alt={domain.title} className="w-full h-full object-cover" />
+                    <img src={getImageUrl(domain.image)} alt={domain.title} className="w-full h-full object-cover" />
                   ) : (
                     <span className="text-sm font-bold text-gray-500">Img</span>
                   )}
@@ -458,41 +300,24 @@ function App() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 text-left max-w-6xl mx-auto px-4">
-            {guestSpeakersData.map((speaker, i) => (
-              <div key={i} className="group flex flex-col items-center text-center p-8 rounded-[2rem] bg-gray-100 dark:bg-black/50 border border-black/10 dark:border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2 transition-all duration-500 premium-glass relative overflow-hidden">
+            {speakersData.map((speaker, i) => (
+              <BorderGlow key={i} className="w-full h-full"><div className="h-full w-full group flex flex-col items-center text-center p-8 rounded-[2rem] bg-gray-100 dark:bg-black/50 border border-black/10 dark:border-white/10 shadow-[0_20px_40px_rgba(0,0,0,0.1)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)] hover:-translate-y-2 transition-all duration-500 premium-glass relative overflow-hidden">
                 <div className="absolute inset-0 bg-gradient-to-b from-black/5 dark:from-white/[0.02] to-transparent pointer-events-none"></div>
                 
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-black/10 dark:border-white/10 group-hover:border-black/30 dark:border-white/30 transition-all duration-500 mb-6 bg-gray-100 dark:bg-black relative z-10 shadow-lg flex items-center justify-center mx-auto">
-                  <img src={speaker.photo} alt={speaker.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                  <img src={getImageUrl(speaker.photo)} alt={speaker.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
                 </div>
                 
                 <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 group-hover:text-emerald-500 dark:group-hover:text-emerald-400 transition-colors relative z-10">{speaker.name}</h3>
                 <p className="text-sm font-bold text-emerald-500 uppercase tracking-wide mb-4 relative z-10">{speaker.title}</p>
                 
-                <div className="mb-6 relative z-10 flex-1 flex flex-col items-center">
-                  <p className={`text-gray-600 dark:text-gray-400 font-medium leading-relaxed transition-all duration-500 ${expandedSpeakers[i] ? '' : 'line-clamp-3'}`}>
-                    {speaker.description}
-                  </p>
-                  
-                  {speaker.description && speaker.description.length > 80 && (
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setExpandedSpeakers(prev => ({ ...prev, [i]: !prev[i] }));
-                      }}
-                      className="mt-3 text-emerald-500 hover:text-emerald-600 dark:hover:text-emerald-400 text-xs font-bold uppercase tracking-wider transition-colors flex items-center gap-1"
-                    >
-                      {expandedSpeakers[i] ? 'Read Less' : 'Read More'}
-                      <svg className={`w-3 h-3 transition-transform duration-300 ${expandedSpeakers[i] ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M19 9l-7 7-7-7"></path></svg>
-                    </button>
-                  )}
-                </div>
+
                 
                 <a href={speaker.linkedin} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white bg-black/5 dark:bg-white/5 hover:bg-gray-900 hover:dark:bg-white hover:text-white hover:dark:text-black px-5 py-2.5 rounded-full transition-all duration-300 border border-black/10 dark:border-white/10 shadow-md relative z-10">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                  Connect
+                  LinkedIn
                 </a>
-              </div>
+              </div></BorderGlow>
             ))}
           </div>
         </section>
@@ -502,7 +327,7 @@ function App() {
         <section id="events" className="w-full scroll-mt-32 mb-32 text-center">
           <div className="border-b border-black/10 dark:border-white/10 pb-8 mb-16 flex flex-col items-center">
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">Event Galleries</h2>
-            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl">A collection of albums from our past meetups, hackathons, and masterclasses.</p>
+
           </div>
 
           {/* DYNAMIC ROADMAP TIMELINE */}
@@ -511,7 +336,7 @@ function App() {
             {/* Central mobile line (hidden on desktop) */}
             <div className="absolute left-8 md:hidden top-0 bottom-0 w-1 bg-black/10 dark:bg-white/10 rounded-full z-0"></div>
 
-            {eventsData.map((event, i) => {
+            {[...eventsData].reverse().map((event, i) => {
               const isEven = i % 2 === 0;
               const pinClasses = [
                 { bg: 'bg-[#C7A287]', tail: 'border-t-[#C7A287]' },
@@ -557,15 +382,15 @@ function App() {
                   <div className={`relative z-10 w-full pl-20 pr-4 md:px-0 md:w-[45%] ${isEven ? 'md:ml-auto md:mr-0' : 'md:mr-auto md:ml-0'}`}>
                      
                      {/* EVENT CARD */}
-                     <BorderGlow className="w-full h-full"><div className="h-full w-full group flex flex-col rounded-[2.5rem] premium-glass hover:-translate-y-2 cursor-pointer overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-black/10 dark:border-white/10" onClick={() => setActiveAlbum(event)}>
+                     <BorderGlow className="w-full h-full"><div className="h-full w-full group flex flex-col rounded-[2.5rem] premium-glass hover:-translate-y-2 cursor-pointer overflow-hidden shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-black/10 dark:border-white/10" onClick={() => { setActiveAlbum(event); if (event.images.length > 0) { setZoomedImage(event.images[0].image); setZoomLevel(1); } }}>
                        {/* Image Section */}
                        <div className="relative h-56 lg:h-72 w-full bg-gray-100 dark:bg-black overflow-hidden flex items-center justify-center">
                          {event.images.length > 0 && (
-                           <img src={event.images[0]} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 blur-3xl transition-all duration-700 group-hover:scale-110" />
+                           <img src={getImageUrl(event.images[0].image)} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 group-hover:opacity-60 blur-3xl transition-all duration-700 group-hover:scale-110" />
                          )}
                          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                            {event.images.length > 0 ? (
-                             <img src={event.images[0]} alt={event.title} className="w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-700" />
+                             <img src={getImageUrl(event.images[0].image)} alt={event.title} className="w-full h-full object-cover drop-shadow-[0_20px_30px_rgba(0,0,0,0.5)] group-hover:scale-105 transition-transform duration-700" />
                            ) : (
                              <div className="w-full h-full bg-black/5 dark:bg-white/5 flex items-center justify-center text-gray-500">No images</div>
                            )}
@@ -628,7 +453,7 @@ function App() {
                     onClick={() => { if (ldr.image) { setZoomedImage(ldr.image); setZoomLevel(1); } }}
                   >
                     {ldr.image ? (
-                      <img src={ldr.image} alt={ldr.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                      <img src={getImageUrl(ldr.image)} alt={ldr.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">No Photo</div>
                     )}
@@ -640,7 +465,7 @@ function App() {
                   {ldr.linkedin && (
                     <a href={ldr.linkedin} target="_blank" rel="noopener noreferrer" className="mt-auto inline-flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white bg-black/10 dark:bg-white/10 hover:bg-emerald-500 hover:text-white px-6 py-3 rounded-full transition-all duration-300 border border-black/20 dark:border-white/20 relative z-10 shadow-md">
                       <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-                      Connect on LinkedIn
+                       LinkedIn
                     </a>
                   )}
                 </div></BorderGlow>
@@ -681,7 +506,7 @@ function App() {
                     onClick={() => { if (ldr.image) { setZoomedImage(ldr.image); setZoomLevel(1); } }}
                   >
                     {ldr.image ? (
-                      <img src={ldr.image} alt={ldr.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                      <img src={getImageUrl(ldr.image)} alt={ldr.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">No Photo</div>
                     )}
@@ -735,7 +560,7 @@ function App() {
                     onClick={() => { if (member.photo) { setZoomedImage(member.photo); setZoomLevel(1); } }}
                   >
                     {member.photo ? (
-                      <img src={member.photo} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
+                      <img src={getImageUrl(member.photo)} alt={member.name} className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700" />
                     ) : (
                       <div className="w-full h-full flex items-center justify-center text-gray-500 text-sm">No Photo</div>
                     )}
@@ -820,208 +645,62 @@ function App() {
 
 
       {/* MODAL OVERLAY */}
-      {modalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4 bg-gray-100 dark:bg-black/60 backdrop-blur-xl animate-[fade-in-up_0.3s_ease-out]" onClick={() => setModalOpen(false)}>
-          <div className="w-full max-w-lg p-8 rounded-[2rem] premium-glass shadow-2xl relative max-h-[90vh] overflow-y-auto no-scrollbar" onClick={e => e.stopPropagation()}>
-            <button className="absolute top-6 right-6 text-gray-500 hover:text-white transition-colors text-xl z-10" onClick={() => setModalOpen(false)} aria-label="Close modal">✕</button>
-            
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-8">Join {selectedEvent}</h2>
-
-            {submitted ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 rounded-full border border-black/20 dark:border-white/20 bg-black/5 dark:bg-white/5 text-gray-900 dark:text-white flex items-center justify-center text-2xl mx-auto mb-6">✓</div>
-                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">Application Received</h3>
-                <p className="text-gray-600 dark:text-gray-400 text-sm mb-8">We will review your application and follow up via email.</p>
-                <button className="w-full py-4 bg-gray-900 dark:bg-white text-gray-100 dark:text-black font-semibold rounded-full shimmer-btn transition-transform hover:scale-[1.02] shadow-xl" onClick={() => setModalOpen(false)}>Return to site</button>
-              </div>
-            ) : (
-              <form onSubmit={async (e) => { 
-                e.preventDefault(); 
-                const formData = new FormData();
-                formData.append('name', e.target[0].value);
-                formData.append('enrollment_no', e.target[1].value);
-                formData.append('mobile_no', e.target[2].value);
-                formData.append('email', e.target[3].value);
-                formData.append('course', e.target[4].value);
-                formData.append('semester', e.target[5].value);
-                formData.append('position', e.target[6].value);
-                
-                const profileInput = e.target.querySelector('input[name="profile_photo"]');
-                if (profileInput && profileInput.files.length > 0) {
-                    formData.append('profile_photo', profileInput.files[0]);
-                }
-                
-                const resumeInput = e.target.querySelector('input[name="resume"]');
-                if (resumeInput && resumeInput.files.length > 0) {
-                    formData.append('resume', resumeInput.files[0]);
-                }
-
-                try {
-                    const response = await fetch(`\${import.meta.env.VITE_API_BASE_URL}/api/candidates/`, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    if (response.ok) {
-                        setSubmitted(true);
-                    } else {
-                        const errorData = await response.json();
-                        alert('Registration failed: ' + JSON.stringify(errorData));
-                    }
-                } catch (error) {
-                    alert('Error connecting to the server: ' + error.message);
-                }
-              }} className="flex flex-col gap-4">
-                
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Name of the Candidate</label>
-                  <input required placeholder="Jane Doe" className="w-full p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-600 focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm" />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Enrollment No.</label>
-                    <input required placeholder="e.g. 123456789" className="w-full p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-600 focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm" />
-                  </div>
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Mobile No.</label>
-                    <input required type="tel" placeholder="+1 234 567 8900" className="w-full p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-600 focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm" />
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5">
-                  <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Email Address</label>
-                  <input required type="email" placeholder="jane@example.com" className="w-full p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-600 focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm" />
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Course</label>
-                    <input required placeholder="B.Tech, BCA, etc." className="w-full p-3 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-900 dark:text-white placeholder:text-gray-600 focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm" />
-                  </div>
-                  <div className="flex flex-col gap-1.5 relative">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Semester</label>
-                    <select required defaultValue="" className="w-full p-3 rounded-xl bg-transparent dark:bg-[#0f0f0f] border border-black/10 dark:border-white/10 text-gray-900 dark:text-white focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm appearance-none">
-                      <option value="" disabled>Select Semester</option>
-                      {[1,2,3,4,5,6,7,8].map(sem => <option key={sem} value={sem}>Semester {sem}</option>)}
-                    </select>
-                    <div className="absolute right-3 top-[34px] pointer-events-none text-gray-600 dark:text-gray-400">
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1.5 relative">
-                  <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Applying for Position</label>
-                  <select required defaultValue="" className="w-full p-3 rounded-xl bg-transparent dark:bg-[#0f0f0f] border border-black/10 dark:border-white/10 text-gray-900 dark:text-white focus:border-black/30 focus:dark:border-white/30 focus:outline-none transition-colors text-sm appearance-none">
-                    <option value="" disabled>Select a position</option>
-                    <option value="web">Web Developer</option>
-                    <option value="android">Android App Developer</option>
-                    <option value="python">Python Developer</option>
-                    <option value="uiux">UI/UX Designer</option>
-                    <option value="data">Data Scientist</option>
-                    <option value="other">Other / Open Role</option>
-                  </select>
-                  <div className="absolute right-3 top-[34px] pointer-events-none text-gray-600 dark:text-gray-400">
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-2">
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Profile Photo</label>
-                    <input name="profile_photo" required type="file" accept="image/*" className="w-full p-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-gray-900 dark:bg-white file:text-gray-100 dark:text-black hover:file:bg-gray-200 focus:outline-none transition-colors text-sm cursor-pointer" />
-                  </div>
-
-                  <div className="flex flex-col gap-1.5">
-                    <label className="text-xs font-medium text-gray-600 dark:text-gray-400 ml-1">Resume (PDF/DOC)</label>
-                    <input name="resume" required type="file" accept=".pdf,.doc,.docx" className="w-full p-2.5 rounded-xl bg-black/5 dark:bg-white/5 border border-black/10 dark:border-white/10 text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-emerald-500 file:text-gray-100 dark:text-black hover:file:bg-emerald-400 focus:outline-none transition-colors text-sm cursor-pointer" />
-                  </div>
-                </div>
-                
-                <button type="submit" className="w-full mt-4 py-4 bg-gray-900 dark:bg-white text-gray-100 dark:text-black font-semibold rounded-full shimmer-btn transition-transform hover:scale-[1.02] flex items-center justify-center gap-2 shadow-xl">
-                  Submit Application
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                </button>
-              </form>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ALBUM LIGHTBOX OVERLAY */}
-      {activeAlbum && (
-        <div className="fixed inset-0 z-[300] flex flex-col items-center justify-center p-4 md:p-8 lg:p-12 bg-gray-100 dark:bg-black/95 backdrop-blur-2xl animate-[fade-in_0.2s_ease-out]" onClick={() => setActiveAlbum(null)}>
-          <div className="w-full max-w-6xl flex justify-between items-center mb-6" onClick={e => e.stopPropagation()}>
-            <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">{activeAlbum.title}</h2>
-              <p className="text-gray-600 dark:text-gray-400 text-sm mt-1">{activeAlbum.images.length} photos in gallery</p>
-            </div>
-            <button className="text-gray-900 dark:text-white hover:text-gray-700 hover:dark:text-gray-300 p-2.5 rounded-full bg-black/10 dark:bg-white/10 hover:bg-gray-900 hover:dark:bg-white/20 transition-colors border border-black/10 dark:border-white/10" onClick={() => setActiveAlbum(null)} aria-label="Close album">✕</button>
-          </div>
-          
-          <div className="w-full max-w-6xl flex-grow overflow-y-auto no-scrollbar rounded-2xl" onClick={e => e.stopPropagation()}>
-            <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-              {activeAlbum.images.map((img, idx) => (
-                <div key={idx} className="break-inside-avoid relative rounded-xl overflow-hidden border border-black/10 dark:border-white/10 group cursor-pointer shadow-xl" onClick={() => { setZoomedImage(img); setZoomLevel(1); }}>
-                  <img src={img} alt={`${activeAlbum.title} photo`} className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* FULL SCREEN ZOOM VIEWER */}
       {zoomedImage && (
-        <div className="fixed inset-0 z-[400] flex items-center justify-center bg-gray-100 dark:bg-black/98 backdrop-blur-3xl" onClick={() => setZoomedImage(null)}>
+        <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/95 backdrop-blur-3xl" onClick={() => setZoomedImage(null)}>
           
           {/* Album Navigation Arrows */}
-          {activeAlbum && activeAlbum.images.includes(zoomedImage) && (
-            <>
-              {activeAlbum.images.indexOf(zoomedImage) > 0 && (
-                <button 
-                  className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-900 dark:text-white hover:text-gray-100 hover:dark:text-black hover:bg-gray-900 hover:dark:bg-white p-4 rounded-full bg-black/10 dark:bg-white/10 transition-all border border-black/20 dark:border-white/20 z-50 shadow-2xl group"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoomedImage(activeAlbum.images[activeAlbum.images.indexOf(zoomedImage) - 1]);
-                    setZoomLevel(1);
-                  }}
-                  aria-label="Previous Photo"
-                >
-                  <svg className="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7"></path></svg>
-                </button>
-              )}
-              {activeAlbum.images.indexOf(zoomedImage) < activeAlbum.images.length - 1 && (
-                <button 
-                  className="absolute right-6 top-1/2 -translate-y-1/2 text-gray-900 dark:text-white hover:text-gray-100 hover:dark:text-black hover:bg-gray-900 hover:dark:bg-white p-4 rounded-full bg-black/10 dark:bg-white/10 transition-all border border-black/20 dark:border-white/20 z-50 shadow-2xl group"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setZoomedImage(activeAlbum.images[activeAlbum.images.indexOf(zoomedImage) + 1]);
-                    setZoomLevel(1);
-                  }}
-                  aria-label="Next Photo"
-                >
-                  <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"></path></svg>
-                </button>
-              )}
-            </>
+          {activeAlbum && activeAlbum.images.some(img => img.image === zoomedImage) && (
+            (() => {
+              const currentIndex = activeAlbum.images.findIndex(img => img.image === zoomedImage);
+              return (
+                <>
+                  {currentIndex > 0 && (
+                    <button 
+                      className="absolute left-6 top-1/2 -translate-y-1/2 text-white hover:text-black hover:bg-white p-4 rounded-full bg-white/10 transition-all border border-white/20 z-50 shadow-2xl group"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setZoomedImage(activeAlbum.images[currentIndex - 1].image);
+                        setZoomLevel(1);
+                      }}
+                      aria-label="Previous Photo"
+                    >
+                      <svg className="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7"></path></svg>
+                    </button>
+                  )}
+                  {currentIndex < activeAlbum.images.length - 1 && (
+                    <button 
+                      className="absolute right-6 top-1/2 -translate-y-1/2 text-white hover:text-black hover:bg-white p-4 rounded-full bg-white/10 transition-all border border-white/20 z-50 shadow-2xl group"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setZoomedImage(activeAlbum.images[currentIndex + 1].image);
+                        setZoomLevel(1);
+                      }}
+                      aria-label="Next Photo"
+                    >
+                      <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"></path></svg>
+                    </button>
+                  )}
+                </>
+              );
+            })()
           )}
 
           {/* Controls */}
           <div className="absolute top-6 right-6 flex gap-4 z-10" onClick={e => e.stopPropagation()}>
-            <button className="text-gray-900 dark:text-white hover:text-gray-100 hover:dark:text-black hover:bg-gray-900 hover:dark:bg-white p-3 rounded-full bg-black/10 dark:bg-white/10 transition-all border border-black/20 dark:border-white/20" onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.25))} aria-label="Zoom Out">
+            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20" onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.25))} aria-label="Zoom Out">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path></svg>
             </button>
-            <button className="text-gray-900 dark:text-white hover:text-gray-100 hover:dark:text-black hover:bg-gray-900 hover:dark:bg-white p-3 rounded-full bg-black/10 dark:bg-white/10 transition-all border border-black/20 dark:border-white/20" onClick={() => setZoomLevel(prev => Math.min(3, prev + 0.25))} aria-label="Zoom In">
+            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20" onClick={() => setZoomLevel(prev => Math.min(3, prev + 0.25))} aria-label="Zoom In">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
             </button>
-            <button className="text-gray-900 dark:text-white hover:text-gray-100 hover:dark:text-black hover:bg-gray-900 hover:dark:bg-white p-3 rounded-full bg-black/10 dark:bg-white/10 transition-all border border-black/20 dark:border-white/20 ml-4" onClick={() => setZoomedImage(null)} aria-label="Close fullscreen">✕</button>
+            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20 ml-4" onClick={() => setZoomedImage(null)} aria-label="Close fullscreen">✕</button>
           </div>
 
           {/* Image Container */}
           <div className="w-full h-full flex items-center justify-center overflow-auto p-4 custom-scrollbar" onClick={e => e.stopPropagation()}>
             <img 
-              src={zoomedImage} 
+              src={getImageUrl(zoomedImage)} 
               alt="Zoomed Event Photo" 
               className="max-w-none transition-transform duration-300 ease-out" 
               style={{ 

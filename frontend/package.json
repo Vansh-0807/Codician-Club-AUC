@@ -1,6 +1,7 @@
 {
   "name": "codician-app",
   "private": true,
+  "homepage": "https://Vansh-0807.github.io/Codician-Club-AUC/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
