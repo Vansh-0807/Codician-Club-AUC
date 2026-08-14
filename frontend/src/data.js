@@ -285,6 +285,16 @@ export const coreTeamData = [
   },
   
   {
+    "name": "Shivam Pandey",
+    "position": "Event Coordinator",
+    "course": "Btech CSE",
+    "semester": "3rd",
+    "description": "Plans events, coordinates teams, and ensures seamless execution of every club activity.",
+    "photo": "core_team/Shivam Pandey.png",
+    "linkedin": "https://www.linkedin.com/in/shivam-pandey-421740402/",
+  },
+
+  {
     "name": "Krrish Dewangan",
     "position": "Student Coordinator",
     "course": "Btech CSE",
