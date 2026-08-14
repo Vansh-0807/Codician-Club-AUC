@@ -142,19 +142,10 @@ function App() {
               { label: 'Contact', href: '#contact' }
             ]}
           />
-          <button 
-            onClick={() => {
-              setTheme(theme === 'dark' ? 'light' : 'dark');
-              setMenuOpen(false);
-            }} 
-            className="md:hidden mt-6 w-full flex items-center justify-center gap-3 p-3 rounded-2xl border border-white/20 text-white bg-white/10 hover:bg-white/20 transition-all font-semibold tracking-wide"
-          >
-            {theme === 'dark' ? '☀️ Switch to Light Mode' : '🌙 Switch to Dark Mode'}
-          </button>
         </div>
 
-        <div className="flex-1 flex justify-end items-center gap-4">
-          <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="hidden md:block p-2 rounded-full border border-gray-500/30 text-gray-800 dark:text-white bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-all">
+        <div className="flex-1 flex justify-end items-center gap-2 md:gap-4">
+          <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')} className="p-2 rounded-full border border-gray-500/30 text-gray-800 dark:text-white bg-gray-200 dark:bg-white/10 hover:bg-gray-300 dark:hover:bg-white/20 transition-all">
             {theme === 'dark' ? '☀️' : '🌙'}
           </button>
           
