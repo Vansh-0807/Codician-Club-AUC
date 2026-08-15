@@ -320,7 +320,14 @@ export const collaboratorsData = [
     name: "Nexus Spring of Code (NSOC)",
     tagline: "In Collaboration With",
     logo: "collaborators/nsoc_logo.png" 
+  },
+
+  {
+    name: "Devity Club AUC",
+    tagline: "In Collaboration With",
+    logo: "collaborators/Devity Club.jpg" 
   }
+  
 ];
 
 export const speakersData = [
