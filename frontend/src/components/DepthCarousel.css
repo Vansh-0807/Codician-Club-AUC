@@ -44,11 +44,15 @@
   will-change: transform, opacity, filter;
   cursor: pointer;
   transform: translate(-50%, -50%);
+  width: max-content;
+  height: max-content;
 }
 
 .depth-carousel__img {
+  max-width: var(--dc-card-width, 600px);
+  max-height: var(--dc-card-height, 600px);
   width: auto;
-  height: 100%;
+  height: auto;
   object-fit: contain;
   display: block;
   pointer-events: none;

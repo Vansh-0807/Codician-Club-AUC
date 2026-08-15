@@ -343,7 +343,7 @@ const DepthCarousel = ({
     <div
       ref={rootRef}
       className={`depth-carousel ${className}`.trim()}
-      style={{ '--dc-perspective': `${perspective}px` }}
+      style={{ '--dc-perspective': `${perspective}px`, '--dc-card-width': `${cardWidth}px`, '--dc-card-height': `${cardHeight}px` }}
       role="group"
       aria-roledescription="carousel"
       aria-label="Depth carousel"
@@ -360,7 +360,7 @@ const DepthCarousel = ({
             key={i}
             className="depth-carousel__card"
             ref={el => (cardRefs.current[i] = el)}
-            style={{ height: cardHeight, borderRadius: radius }}
+            style={{ borderRadius: radius }}
             aria-roledescription="slide"
             aria-label={`${i + 1} of ${count}`}
             aria-hidden={active !== i}

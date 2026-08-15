@@ -691,8 +691,8 @@ function App() {
             {activeAlbum.images.length > 0 ? (
               <DepthCarousel 
                 items={activeAlbum.images.map(img => ({ image: getImageUrl(img.image), alt: activeAlbum.title }))}
-                cardWidth={450}
-                cardHeight={600}
+                cardWidth={800}
+                cardHeight={500}
                 depth={220}
                 spread={90}
                 tilt={22}
