@@ -1,7 +1,6 @@
 {
   "name": "codician-app",
   "private": true,
-  "homepage": "https://Vansh-0807.github.io/Codician-Club-AUC/",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -10,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "gsap": "^3.15.0",
     "playwright": "^1.62.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

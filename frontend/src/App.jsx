@@ -3,6 +3,8 @@ import BorderGlow from './components/BorderGlow/BorderGlow';
 import TextType from './components/TextType/TextType';
 import TrueFocus from './components/TrueFocus/TrueFocus';
 import GooeyNav from './components/GooeyNav/GooeyNav';
+import GlareHover from './components/GlareHover';
+import DepthCarousel from './components/DepthCarousel';
 
 import "./App.css";
 import { settingsData, aboutUsData, collegeData, domainsData, collaboratorsData, eventsData, leadersData, mentorsData, coreTeamData, speakersData } from "./data";
@@ -226,8 +228,30 @@ function App() {
             <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">About Us</h2>
           </div>
           
+          <div className="relative mb-12 rounded-3xl shadow-2xl border border-black/5 dark:border-white/5 w-full h-auto">
+            <GlareHover
+              width="100%"
+              height="100%"
+              glareColor="#ffffff"
+              glareOpacity={0.3}
+              glareAngle={-30}
+              glareSize={300}
+              transitionDuration={800}
+              playOnce={false}
+              borderRadius="1.5rem"
+            >
+              <img 
+                src="/media/about_us/About Us.png" 
+                alt="About Us" 
+                className="w-full h-auto object-cover block"
+                style={{ aspectRatio: 'auto' }}
+              />
+            </GlareHover>
+          </div>
+
           <div className="p-10 md:p-16 rounded-3xl premium-glass shadow-2xl relative overflow-hidden group hover:-translate-y-2 transition-transform duration-500 text-left">
              <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl group-hover:bg-emerald-400/20 transition-all duration-700 pointer-events-none -translate-y-1/2 translate-x-1/2"></div>
+             
              <p className="text-xl md:text-2xl text-gray-700 dark:text-gray-300 leading-relaxed font-medium relative z-10">
                {aboutUsData?.text}
              </p>
@@ -676,72 +700,36 @@ function App() {
 
 
       {/* MODAL OVERLAY */}
-      {/* FULL SCREEN ZOOM VIEWER */}
-      {zoomedImage && (
-        <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/95 backdrop-blur-3xl" onClick={() => setZoomedImage(null)}>
+      {/* FULL SCREEN ZOOM VIEWER (REPLACED WITH DEPTH CAROUSEL) */}
+      {activeAlbum && (
+        <div className="fixed inset-0 z-[400] flex items-center justify-center bg-black/95 backdrop-blur-3xl" onClick={() => { setActiveAlbum(null); setZoomedImage(null); }}>
           
-          {/* Album Navigation Arrows */}
-          {activeAlbum && activeAlbum.images.some(img => img.image === zoomedImage) && (
-            (() => {
-              const currentIndex = activeAlbum.images.findIndex(img => img.image === zoomedImage);
-              return (
-                <>
-                  {currentIndex > 0 && (
-                    <button 
-                      className="absolute left-6 top-1/2 -translate-y-1/2 text-white hover:text-black hover:bg-white p-4 rounded-full bg-white/10 transition-all border border-white/20 z-50 shadow-2xl group"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setZoomedImage(activeAlbum.images[currentIndex - 1].image);
-                        setZoomLevel(1);
-                      }}
-                      aria-label="Previous Photo"
-                    >
-                      <svg className="w-6 h-6 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M15 19l-7-7 7-7"></path></svg>
-                    </button>
-                  )}
-                  {currentIndex < activeAlbum.images.length - 1 && (
-                    <button 
-                      className="absolute right-6 top-1/2 -translate-y-1/2 text-white hover:text-black hover:bg-white p-4 rounded-full bg-white/10 transition-all border border-white/20 z-50 shadow-2xl group"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setZoomedImage(activeAlbum.images[currentIndex + 1].image);
-                        setZoomLevel(1);
-                      }}
-                      aria-label="Next Photo"
-                    >
-                      <svg className="w-6 h-6 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M9 5l7 7-7 7"></path></svg>
-                    </button>
-                  )}
-                </>
-              );
-            })()
-          )}
-
           {/* Controls */}
           <div className="absolute top-6 right-6 flex gap-4 z-10" onClick={e => e.stopPropagation()}>
-            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20" onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.25))} aria-label="Zoom Out">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM13 10H7"></path></svg>
-            </button>
-            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20" onClick={() => setZoomLevel(prev => Math.min(3, prev + 0.25))} aria-label="Zoom In">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"></path></svg>
-            </button>
-            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20 ml-4" onClick={() => setZoomedImage(null)} aria-label="Close fullscreen">✕</button>
+            <button className="text-white hover:text-black hover:bg-white p-3 rounded-full bg-white/10 transition-all border border-white/20 ml-4" onClick={() => { setActiveAlbum(null); setZoomedImage(null); }} aria-label="Close fullscreen">✕</button>
           </div>
 
           {/* Image Container */}
-          <div className="w-full h-full flex items-center justify-center overflow-auto p-4 custom-scrollbar" onClick={e => e.stopPropagation()}>
-            <img 
-              src={getImageUrl(zoomedImage)} 
-              alt="Zoomed Event Photo" 
-              className="max-w-none transition-transform duration-300 ease-out" 
-              style={{ 
-                transform: `scale(${zoomLevel})`, 
-                transformOrigin: 'center center',
-                maxHeight: zoomLevel <= 1 ? '90vh' : 'none',
-                maxWidth: zoomLevel <= 1 ? '90vw' : 'none',
-                objectFit: 'contain'
-              }} 
-            />
+          <div className="w-full h-full flex items-center justify-center overflow-hidden p-4" onClick={e => e.stopPropagation()}>
+            {activeAlbum.images.length > 0 ? (
+              <DepthCarousel 
+                items={activeAlbum.images.map(img => ({ image: getImageUrl(img.image), alt: activeAlbum.title }))}
+                cardWidth={800}
+                cardHeight={500}
+                depth={220}
+                spread={90}
+                tilt={22}
+                tiltDirection="right"
+                perspective={1400}
+                visibleCards={4}
+                falloff={0.2}
+                blur={6}
+                autoplay={true}
+                loop={true}
+              />
+            ) : (
+              <div className="text-white">No images available for this event.</div>
+            )}
           </div>
         </div>
       )}
