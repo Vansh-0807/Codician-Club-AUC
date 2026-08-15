@@ -5,7 +5,7 @@ import TrueFocus from './components/TrueFocus/TrueFocus';
 import GooeyNav from './components/GooeyNav/GooeyNav';
 
 import "./App.css";
-import { settingsData, aboutUsData, collegeData, domainsData, eventsData, leadersData, mentorsData, coreTeamData, speakersData } from "./data";
+import { settingsData, aboutUsData, collegeData, domainsData, collaboratorsData, eventsData, leadersData, mentorsData, coreTeamData, speakersData } from "./data";
 
 
 const projects = [
@@ -137,6 +137,7 @@ function App() {
               { label: 'Mentors', href: '#mentors' },
               { label: 'Team', href: '#team' },
               { label: 'Domains', href: '#domains' },
+              { label: 'Collaborators', href: '#collaborators' },
               { label: 'Speakers', href: '#speakers' },
               { label: 'Events', href: '#events' },
               { label: 'Contact', href: '#contact' }
@@ -299,7 +300,29 @@ function App() {
 
 
 
-        
+        {/* COLLABORATORS SECTION */}
+        <section id="collaborators" className="w-full scroll-mt-32 mb-32 text-center">
+          <div className="mb-16 border-b border-black/10 dark:border-white/10 pb-8 flex flex-col items-center">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4 text-gray-900 dark:text-white">Our Collaborators</h2>
+            <p className="text-gray-600 dark:text-gray-400 text-lg max-w-2xl">Organizations that partner with us to create impactful experiences.</p>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-8">
+            {collaboratorsData.map((org, i) => (
+              <BorderGlow key={i} className="w-full max-w-md">
+                <div className="h-full w-full flex flex-col items-center p-10 md:p-12 rounded-[2.5rem] premium-glass shadow-2xl relative overflow-hidden hover:-translate-y-2 transition-transform duration-500">
+                  <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/5 to-transparent pointer-events-none"></div>
+                  <div className="w-28 h-28 md:w-36 md:h-36 rounded-2xl overflow-hidden border-4 border-black/10 dark:border-white/10 mb-6 bg-gray-100 dark:bg-black relative z-10 shadow-lg flex items-center justify-center">
+                    <img src={getImageUrl(org.logo)} alt={org.name} className="w-full h-full object-contain p-2" />
+                  </div>
+                  <p className="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2 relative z-10">{org.tagline}</p>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white tracking-tight relative z-10">{org.name}</h3>
+                </div>
+              </BorderGlow>
+            ))}
+          </div>
+        </section>
+
         {/* GUEST SPEAKERS SECTION */}
         <section id="speakers" className="w-full scroll-mt-32 mb-32 text-center">
           <div className="border-b border-black/10 dark:border-white/10 pb-8 mb-16 flex flex-col items-center">
