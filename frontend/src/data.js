@@ -115,7 +115,7 @@ export const leadersData = [
     "role": "Vice President",
     "description": "Supporting the club's vision through leadership, collaboration, and effective execution of initiatives.",
     "linkedin": "https://www.linkedin.com/in/devanshu-dasgupta-509641299/",
-    "image": "leadership/Devanshu_Das_Gupta.png"
+    "image": "leadership/Devanshu Dasgupta.png"
   }
 ];
 export const mentorsData = [

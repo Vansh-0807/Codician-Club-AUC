@@ -42,6 +42,14 @@
 
 .gooey-nav-container {
   position: relative;
+  max-width: 100vw;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  padding: 10px 0; /* Prevent gooey bubble from clipping top/bottom */
+}
+.gooey-nav-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
 }
 
 .gooey-nav-container nav {
