@@ -78,15 +78,13 @@ const GooeyNav = ({
   };
 
   const updateEffectPosition = (element) => {
-    if (!containerRef.current || !filterRef.current || !textRef.current || !element) return;
-    const containerRect = containerRef.current.getBoundingClientRect();
-    const pos = element.getBoundingClientRect();
+    if (!filterRef.current || !textRef.current || !element) return;
 
     const styles = {
-      left: `${pos.x - containerRect.x + containerRef.current.scrollLeft}px`,
-      top: `${pos.y - containerRect.y + containerRef.current.scrollTop}px`,
-      width: `${pos.width}px`,
-      height: `${pos.height}px`
+      left: `${element.offsetLeft}px`,
+      top: `${element.offsetTop}px`,
+      width: `${element.offsetWidth}px`,
+      height: `${element.offsetHeight}px`
     };
     Object.assign(filterRef.current.style, styles);
     Object.assign(textRef.current.style, styles);
@@ -163,10 +161,10 @@ const GooeyNav = ({
               </a>
             </li>
           ))}
+          <span className="effect filter" ref={filterRef} />
+          <span className="effect text" ref={textRef} />
         </ul>
       </nav>
-      <span className="effect filter" ref={filterRef} />
-      <span className="effect text" ref={textRef} />
     </div>
   );
 };
