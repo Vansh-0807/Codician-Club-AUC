@@ -151,7 +151,7 @@ export const coreTeamData = [
     "semester": "5th",
     "description": "Transforming ideas into technology through leadership, creativity, and teamwork.",
     "linkedin": "https://www.linkedin.com/in/priyanshupanda/",
-    "photo": "core_team/Priyanshu_Panda.png"
+    "photo": "core_team/Priyanshu Panda.jpeg"
   },
   {
     "name": "Vansh Rateria",
