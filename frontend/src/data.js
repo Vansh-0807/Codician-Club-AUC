@@ -178,7 +178,7 @@ export const coreTeamData = [
     "position": "Web & App Development Lead",
     "course": "Btech CSE",
     "semester": "5th",
-    "description": "focusing on building engaging digital experiences and turning creative ideas into functional, user-friendly solutions.",
+    "description": "Focusing on building engaging digital experiences and turning creative ideas into functional, user-friendly solutions.",
     "photo": "core_team/Mansi Verma.png",
     "linkedin": "https://www.linkedin.com/in/mansi-verma-67228a330/",
   },
@@ -314,25 +314,34 @@ export const coreTeamData = [
     "linkedin": "https://www.linkedin.com/in/prince-kumar-mishra-735b7635b/",
   }
 ];
+
+export const collaboratorsData = [
+  {
+    name: "Nexus Spring of Code (NSOC)",
+    tagline: "In Collaboration With",
+    logo: "collaborators/nsoc_logo.png" 
+  }
+];
+
 export const speakersData = [
    {
     name: "Mr. Santu Purkait",
     title: "Director of Netcamp Solutions Private Limited ",
     linkedin: "https://www.linkedin.com/in/santu-purkait-981414103/",
-    photo: "guest_speakers/Santu Purkait.png" // Place the image file in frontend/public/media/speakers/
+    photo: "guest_speakers/Santu Purkait.png" 
   },
   
   {
     name: "Mr. Rohit Jain",
     title: "Ex-Amazon | IIT KGP Alumnus | Highest Rated Udemy Instructor | SDE @Square, Boston, USA ",
     linkedin: "https://www.linkedin.com/in/rohit-jain-343437187/",
-    photo: "guest_speakers/Rohit Jain.png" // Place the image file in frontend/public/media/speakers/
+    photo: "guest_speakers/Rohit Jain.png" 
   },
 
   {
     name: "Mr. Dishant Gandhi",
     title: "AI/MLConsultant Ruffalo Noel Leviitz | LLM Expert | Specialized Conversational AI | Mentored 4k+ Students ",
     linkedin: "https://www.linkedin.com/in/dishant-gandhi/",
-    photo: "guest_speakers/Dishant Gandhi.png" // Place the image file in frontend/public/media/speakers/
+    photo: "guest_speakers/Dishant Gandhi.png" 
   }
 ];
