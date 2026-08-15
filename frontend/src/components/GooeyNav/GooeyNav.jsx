@@ -83,8 +83,8 @@ const GooeyNav = ({
     const pos = element.getBoundingClientRect();
 
     const styles = {
-      left: `${pos.x - containerRect.x}px`,
-      top: `${pos.y - containerRect.y}px`,
+      left: `${pos.x - containerRect.x + containerRef.current.scrollLeft}px`,
+      top: `${pos.y - containerRect.y + containerRef.current.scrollTop}px`,
       width: `${pos.width}px`,
       height: `${pos.height}px`
     };
